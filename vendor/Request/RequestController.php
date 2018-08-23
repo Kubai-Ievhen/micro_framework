@@ -54,6 +54,10 @@ class RequestController
         return $this->data[$key]??null;
     }
 
+    public function getAll(){
+        return $this->data;
+    }
+
     public function method(){
         return $this->method;
     }

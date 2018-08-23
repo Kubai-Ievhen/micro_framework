@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: smartit-9
- * Date: 30.01.18
- * Time: 15:32
- */
 
 namespace vendor\database;
-
 
 use vendor\config\ConfigController;
 
@@ -15,7 +8,6 @@ class DBBase
 {
     private $db;
     private static $instance;
-
 
     private function __construct()
     {
@@ -51,6 +43,26 @@ class DBBase
 
     public function queryParam(string $sql, array $parameters){
         $prepare_request = $this->db->prepare($sql);
-        return $prepare_request->execute($parameters);
+        $prepare_request->execute($parameters);
+        return $prepare_request->fetchAll();
+    }
+
+    public function queryPrepare(string $sql, array $parameters){
+        $prepare_request = $this->db->prepare($sql);
+
+        foreach ($parameters as $key=>$value){
+            $prepare_request->bindParam(":$key", $value);
+        }
+
+        $prepare_request->execute($parameters);
+        return $prepare_request->execute();
+    }
+
+    public function cleanTable(string $t_name){
+        return $this->exec(SQLClass::delete($t_name));
+    }
+
+    public function deleteID(int $id, string $t_name){
+        return $this->exec(SQLClass::deleteID($t_name,$id));
     }
 }

@@ -10,11 +10,14 @@ namespace app\controller;
 
 
 use vendor\controller\Controller;
+use vendor\Request\RequestController;
 
 class TestController extends Controller
 {
 
     public function getTest(){
+        $req = RequestController::init();
+        var_dump($req);
         return 'Test';
     }
 }

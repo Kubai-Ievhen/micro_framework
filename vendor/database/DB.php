@@ -25,6 +25,7 @@ class DB
 
     public function setSQL(string $sql){
         $this->sql = $sql;
+        $this->data = $this->db->query($this->sql);
 
         return $this;
     }
@@ -32,25 +33,22 @@ class DB
     public function setPropertySQL(string $p_sql, array $p_data){
         $this->p_data = $p_data;
         $this->p_sql = $p_sql;
+        $this->data = $this->db->queryParam($this->p_sql, $this->p_data);
 
         return $this;
     }
 
     public function get(){
-        if (count($this->sql)){
-            $this->data = $this->db->query($this->sql);
-        } elseif (count($this->p_sql)){
-            $this->data = $this->db->queryParam($this->p_sql, $this->p_data);
-        }
-
         return $this->data;
     }
 
     public function cleanTable(string $t_name){
-        return $this->db->exec("DELETE FROM `$t_name`");
+        return $this->db->cleanTable($t_name);
     }
 
     public function deleteID(int $id, string $t_name){
-        return $this->db->exec("DELETE FROM `$t_name` WHERE id = $id");
+        return $this->db->deleteID($id, $t_name);
     }
+
+
 }

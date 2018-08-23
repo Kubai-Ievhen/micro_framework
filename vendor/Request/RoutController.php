@@ -1,15 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: smartit-9
- * Date: 30.01.18
- * Time: 13:42
- */
 
 namespace vendor\Request;
-
-
-use app\controller\TestController;
 
 class RoutController
 {
@@ -40,9 +31,14 @@ class RoutController
     public function runClass(){
         $metod = $this->metod;
 
-        $class = new $this->class();
-        $result = $class->$metod();
+        if (class_exists($this->class) && method_exists($this->class, $metod)) {
+            $result = call_user_func([$this->class, $metod]);
+            echo json_encode($result);
 
-        echo json_encode($result);
+            return;
+        }
+
+        header("HTTP/1.0 404 Not Found");
+        return;
     }
 }
